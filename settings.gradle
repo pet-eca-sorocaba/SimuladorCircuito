@@ -1,0 +1,2 @@
+include ':app', ':simuladorcircuito'
+rootProject.name='CircuitoSimulacao'
