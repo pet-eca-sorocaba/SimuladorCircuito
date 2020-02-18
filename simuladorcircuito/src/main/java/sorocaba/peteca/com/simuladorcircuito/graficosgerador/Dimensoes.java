@@ -21,7 +21,6 @@ public class Dimensoes {
         larguraGrafico = 0.96f * larguraTotal;
         larguraEixoX = 0.02f * larguraTotal;
     }
-
     public float getAlturaGrafico() {
         return alturaGrafico;
     }

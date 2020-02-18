@@ -34,8 +34,8 @@ public class Grafico extends View {
     private int numeroIntervalos = 4;
     private boolean graficoFechado, gradeHorizontal;
     private class Barra {
-        public float left, top, right, bottom;
-        public int id;
+        float left, top, right, bottom;
+        int id;
         Barra(float left, float top, float right, float bottom, int id) {
             this.left = left;
             this.top = top;
