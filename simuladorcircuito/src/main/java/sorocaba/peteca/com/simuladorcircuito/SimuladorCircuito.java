@@ -3,6 +3,7 @@ package sorocaba.peteca.com.simuladorcircuito;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -14,6 +15,8 @@ public class SimuladorCircuito extends LinearLayout {
     private Grafico graficoUm;
     private Grafico graficoDois;
     private Circuito circuito;
+    private Resultados resultados;
+    private View view;
 
     public SimuladorCircuito(Context context) {
         super(context);
@@ -27,7 +30,7 @@ public class SimuladorCircuito extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = mInflater.inflate(R.layout.layout_principal, this, true);
+        view = mInflater.inflate(R.layout.layout_principal, this, true);
         graficoUm = findViewById(R.id.graficoUm);
         graficoDois = findViewById(R.id.graficoDois);
         circuito = view.findViewById(R.id.circuito);
@@ -39,12 +42,32 @@ public class SimuladorCircuito extends LinearLayout {
                 circuito.grade(3);
             }
         });
-    }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasWindowFocus) {
-        super.onWindowFocusChanged(hasWindowFocus);
-        graficoUm.iniciar();
-        graficoDois.iniciar();
+        graficoUm.setNomeEixoX("ωt");
+        graficoUm.setNomeEixoY("V");
+        graficoUm.atualizaEscala();
+        graficoDois.setNomeEixoY("A");
+        graficoDois.setNomeEixoX("ωt");
+
+        graficoUm.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                graficoUm.changeCursor(event);
+                graficoDois.setCursor(graficoUm.getCursor());
+                return true;
+            }
+        });
+
+        graficoDois.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                graficoDois.changeCursor(event);
+                graficoUm.setCursor(graficoDois.getCursor());
+                return true;
+            }
+        });
     }
 }
+
+//    private DecimalFormat df;
+//        df = new DecimalFormat("0.000");
