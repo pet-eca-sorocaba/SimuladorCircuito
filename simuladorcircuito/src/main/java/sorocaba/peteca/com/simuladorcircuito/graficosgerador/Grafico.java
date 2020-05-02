@@ -19,11 +19,11 @@ public class Grafico extends View {
     private Path pathEixos, pathGrade, pathEscala, pathCursor, pathDados, pathDadosDois, pathDadosTres;
     private Paint paintEixos, paintGrade, paintTextos, paintCursor, paintDados, paintDadosDois, paintDadosTres;
     private Rect rect;
-    private String[] periodosString;
+    private String[] periodosString = {"π/2", "π", "3π/2","2π"};
 
     // Variaveis disponiveis para o usuario fazer modificações
     private String nomeEixoX = "", nomeEixoY = "";
-    private int periodos = 4, periodosReais = 2;
+    private int periodos = 4, periodosReais = 1;
     private boolean cursorStatus = false, gradeStatus = false, betaAtivado = false;
     private float tamanhoMarcacoes = 0.05f, tamanhoText = 1.5f, subtamanhoText = 1.3f;
     private Serie serie, serieDois, serieTres;

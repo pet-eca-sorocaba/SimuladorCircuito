@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         simulador.setNomesEixoX("ωt", "ωt");
         simulador.setCursorConfig(Color.BLUE, 3);
         simulador.setCursorStatus(true);
-        simulador.setPeriodos(1);
+        //simulador.setPeriodos(1);
         simulador.setEixosWidth(5);
         simulador.setEixosHeigthMarcacoes(0.05f);
         simulador.setEixosTextSize(1.5f);
