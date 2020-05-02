@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Circuito;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Grafico;
+import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
 public class SimuladorCircuito extends LinearLayout {
     private Grafico graficoUm;
@@ -34,47 +35,6 @@ public class SimuladorCircuito extends LinearLayout {
         graficoDois = findViewById(R.id.graficoDois);
         circuito = view.findViewById(R.id.circuito);
 
-        circuito.post(new Runnable() {
-            @Override
-            public void run() {
-                circuito.iniciar(4);
-                circuito.grade(3);
-            }
-        });
-
-        graficoUm.setNomeEixoY("V"); // DEIXAR MODIFICAVEL
-        graficoUm.setNomeEixoX("ωt"); // DEIXAR MODIFICAVEL
-        graficoDois.setNomeEixoY("A"); // DEIXAR MODIFICAVEL
-        graficoDois.setNomeEixoX("ωt"); // DEIXAR MODIFICAVEL
-
-        graficoUm.setCursorColor(Color.BLUE); // DEIXAR MODIFICAVEL
-        graficoUm.setCursorStatus(true); // DEIXAR MODIFICAVEL
-        graficoUm.setCursorWidth(4);// DEIXAR MODIFICAVEL
-        graficoDois.setCursorColor(Color.BLUE); // DEIXAR MODIFICAVEL
-        graficoDois.setCursorStatus(true); // DEIXAR MODIFICAVEL
-        graficoDois.setCursorWidth(4); // DEIXAR MODIFICAVEL
-
-        graficoUm.setPeriodos(3); // DEIXAR MODIFICAVEL
-        graficoDois.setPeriodos(3); // DEIXAR MODIFICAVEL
-
-        graficoUm.setEixosWidth(5); // DEIXAR MODIFICAVEL
-        graficoUm.setEixosHeigthMarcacoes(0.05f); // DEIXAR MODIFICAVEL
-
-        graficoDois.setEixosWidth(5); // DEIXAR MODIFICAVEL
-        graficoDois.setEixosHeigthMarcacoes(0.05f); // DEIXAR MODIFICAVEL
-
-        graficoUm.setEixosTextSize(1.5f); // DEIXAR MODIFICAVEL
-        graficoDois.setEixosTextSize(1.5f); // DEIXAR MODIFICAVEL
-
-        graficoUm.setEixosSubTextSize(1.4f); // DEIXAR MODIFICAVEL
-        graficoDois.setEixosSubTextSize(1.4f); // DEIXAR MODIFICAVEL
-
-        graficoUm.setBeta(true); // DEIXAR MODIFICAVEL
-        graficoDois.setBeta(true); // DEIXAR MODIFICAVEL
-
-        graficoUm.setGradeStatus(true); // DEIXAR MODIFICAVEL
-        graficoDois.setGradeStatus(true); // DEIXAR MODIFICAVEL
-
         graficoUm.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -92,17 +52,122 @@ public class SimuladorCircuito extends LinearLayout {
                 return true;
             }
         });
-        final int[] val = {1};
-        circuito.setOnClickListener(new OnClickListener() {
+
+        circuito.post(new Runnable() {
             @Override
-            public void onClick(View view) {
-                graficoUm.setPeriodos(val[0]%4 + 1);
-                graficoDois.setPeriodos((val[0] +1)%4 + 1);
-                val[0] = val[0] + 1;
-                graficoUm.setCursorWidth(val[0]);// DEIXAR MODIFICAVEL
-                graficoDois.setCursorWidth(val[0]); // DEIXAR MODIFICAVEL
+            public void run() {
+                circuito.iniciar(4);
+                circuito.grade(3);
             }
         });
+
+//        final int[] val = {1};
+//        circuito.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                graficoUm.setPeriodos(val[0]%4 + 1);
+//                graficoDois.setPeriodos((val[0] +1)%4 + 1);
+//                val[0] = val[0] + 1;
+//                graficoUm.setCursorWidth(val[0]);// DEIXAR MODIFICAVEL
+//                graficoDois.setCursorWidth(val[0]); // DEIXAR MODIFICAVEL
+//            }
+//        });
+    }
+
+    public void setNomesEixoY(String nome, String nomeDois) {
+        graficoUm.setNomeEixoY(nome);
+        graficoDois.setNomeEixoY(nomeDois);
+    }
+    public void setNomesEixoX(String nome, String nomeDois) {
+        graficoUm.setNomeEixoX(nome);
+        graficoDois.setNomeEixoX(nomeDois);
+    }
+
+    public void setCursorConfig (int color, int width) {
+        graficoUm.setCursorColor(color);
+        graficoUm.setCursorWidth(width);
+        graficoDois.setCursorColor(color);
+        graficoDois.setCursorWidth(width);
+    }
+    public void setCursorStatus (boolean status) {
+        graficoUm.setCursorStatus(status);
+        graficoDois.setCursorStatus(status);
+    }
+
+    public void setPeriodos(int periodos) {
+        graficoUm.setPeriodos(periodos);
+        graficoDois.setPeriodos(periodos);
+    }
+
+    public void setEixosWidth(int width) {
+        graficoUm.setEixosWidth(width);
+        graficoDois.setEixosWidth(width);
+    }
+
+    public void setEixosHeigthMarcacoes(float width) {
+        graficoUm.setEixosHeigthMarcacoes(width);
+        graficoDois.setEixosHeigthMarcacoes(width);
+    }
+
+    public void setEixosTextSize(float width) {
+        graficoUm.setEixosTextSize(width);
+        graficoDois.setEixosTextSize(width);
+    }
+    public void setEixosSubTextSize(float width) {
+        graficoUm.setEixosSubTextSize(width);
+        graficoDois.setEixosSubTextSize(width);
+    }
+
+    public void setBeta(boolean status) {
+        graficoUm.setBeta(status);
+        graficoDois.setBeta(status);
+    }
+
+    public void setGradeStatus(boolean status) {
+        graficoUm.setGradeStatus(status);
+        graficoDois.setGradeStatus(status);
+    }
+
+    public void setColorTensaoUm(int color) {
+        graficoUm.setColorPrincipal(color);
+    }
+    public void setColorTensaoDois(int color) {
+        graficoUm.setColorSecundario(color);
+    }
+    public void setColorTensaoTres(int color) {
+        graficoUm.setColorTerciario(color);
+    }
+    public void setColorCorrente(int color) {
+        graficoDois.setColorPrincipal(color);
+    }
+
+    public void addSerie(Serie serie, int grafico) {
+        if (grafico == 1) {
+            graficoUm.addSerie(serie);
+        } else if (grafico == 2) {
+            graficoDois.addSerie(serie);
+        }
+    }
+    public void addSerie(Serie serie, Serie serieDois, int grafico) {
+        if (grafico == 1) {
+            graficoUm.addSerie(serie, serieDois);
+        } else if (grafico == 2) {
+            graficoDois.addSerie(serie, serieDois);
+        }
+    }
+    public void addSerie(Serie serie, Serie serieDois, Serie serieTres, int grafico) {
+        if (grafico == 1) {
+            graficoUm.addSerie(serie, serieDois, serieTres);
+        } else if (grafico == 2) {
+            graficoDois.addSerie(serie, serieDois, serieTres);
+        }
+    }
+    public void removeSerie(int grafico) {
+        if (grafico == 1) {
+            graficoUm.removeSerie();
+        } else if (grafico == 2) {
+            graficoDois.removeSerie();
+        }
     }
 }
 
