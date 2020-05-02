@@ -2,7 +2,7 @@ package sorocaba.peteca.com.simuladorcircuito.graficosgerador;
 
 public class Serie {
     public double[] valor;
-    public int beta, max, tamanho;
+    public int beta = 0, max, tamanho;
 
     public Serie(double[] valorY) {
         this.valor = valorY;

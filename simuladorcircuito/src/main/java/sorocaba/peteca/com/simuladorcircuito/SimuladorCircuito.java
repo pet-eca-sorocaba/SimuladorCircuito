@@ -74,6 +74,10 @@ public class SimuladorCircuito extends LinearLayout {
 //        });
     }
 
+    public void atualizar() {
+        graficoUm.invalidate();
+        graficoDois.invalidate();
+    }
     public void setNomesEixoY(String nome, String nomeDois) {
         graficoUm.setNomeEixoY(nome);
         graficoDois.setNomeEixoY(nomeDois);
