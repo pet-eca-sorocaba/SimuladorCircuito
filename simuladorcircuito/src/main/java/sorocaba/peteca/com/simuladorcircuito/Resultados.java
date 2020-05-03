@@ -19,7 +19,7 @@ class Resultados extends View {
     }
 
     private void init(Context context) {
-        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //View view = mInflater.inflate(R.layout.layout_principal, this, true);
     }
     // CLASSE QUE CONTEM TODAS AS INFORMAÇOES SOBRE O MÉTODO

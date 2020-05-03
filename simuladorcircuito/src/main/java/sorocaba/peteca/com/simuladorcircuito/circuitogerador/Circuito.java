@@ -15,15 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Circuito extends View {
-    Paint paintFundo, paintGrade, paintSelecao;
-    int divisao = 10, tamanhoMinimo = 0, segundaDivisao = 0;
+    int divisao = 10, tamanhoMinimo = 0, segundaDivisao = 0, ultimoSelecionado = -1;
     boolean orientacaoVertical = false;
-    private List<Ponto> matrizPontos = new ArrayList<>();
+
+    private List<Ponto> matrizPontos = new ArrayList<>(); //TODO: VOU APAGAR DPS
     private List<Path> pathLists = new ArrayList<>();
     private List<Item> itemList = new ArrayList<>();
     Path pathGrade, pathSelecao;
+    Paint paintFundo, paintGrade, paintSelecao;
     Desenho desenhar;
-    int ultimoSelecionado = -1;
 
     // VARIAVEIS QUE O USUARIO PODE MUDAR
     int raioGrade = 2;
@@ -33,12 +33,10 @@ public class Circuito extends View {
         super(context);
         init();
     }
-
     public Circuito(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
-
     private void init() {
         paintFundo = new Paint();
         paintFundo.setStyle(Paint.Style.FILL);
@@ -95,7 +93,7 @@ public class Circuito extends View {
 
     public void componente(Ponto pontoUm, Ponto pontoDois, int componente, int numeroItem) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
-            Path path = desenhar.componente(pontoUm, pontoDois, componente);
+            Path path = desenhar.componente(pontoUm, pontoDois, componente); // Ele atualiza os valores dos pontos
             if (path != null) {
                 pathLists.add(path);
                 itemList.add(new Item(numeroItem, new Ponto((pontoUm.X + pontoDois.X) / 2, (pontoUm.Y + pontoDois.Y) / 2)));
