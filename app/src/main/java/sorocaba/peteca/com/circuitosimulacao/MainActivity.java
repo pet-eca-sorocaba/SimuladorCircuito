@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
         simulador.setColorCorrente(Color.RED);
 
         simulador.setSimuladorListener(this);
+        simulador.setCircuitoColor(Color.BLUE);
+        simulador.setCircuitoWidth(4);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package sorocaba.peteca.com.simuladorcircuito;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -139,12 +140,15 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
 
     public void setColorTensaoUm(int color) {
         graficoUm.setColorPrincipal(color);
+        circuito.setColorPrincipal(color);
     }
     public void setColorTensaoDois(int color) {
         graficoUm.setColorSecundario(color);
+        circuito.setColorSecundario(color);
     }
     public void setColorTensaoTres(int color) {
         graficoUm.setColorTerciario(color);
+        circuito.setColorTerciario(color);
     }
     public void setColorCorrente(int color) {
         graficoDois.setColorPrincipal(color);
@@ -177,6 +181,13 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         } else if (grafico == 2) {
             graficoDois.removeSerie();
         }
+    }
+
+    public void setCircuitoWidth(int width) {
+        circuito.setStrokeWidth(width);
+    }
+    public void setCircuitoColor(int color) {
+        circuito.setColor(color);
     }
     //endregion
 }
