@@ -195,14 +195,14 @@ public class Grafico extends View {
         canvas.drawRect(rect, paintEixos);
         paintEixos.setColor(Color.BLACK);
         canvas.drawPath(pathEixos, paintEixos);
-        if (serie != null)
-            canvas.drawPath(pathDados, paintDados);
+        if (gradeStatus)
+            canvas.drawPath(pathGrade, paintGrade);
         if (serieDois != null)
             canvas.drawPath(pathDadosDois, paintDadosDois);
         if (serieTres != null)
             canvas.drawPath(pathDadosTres, paintDadosTres);
-        if (gradeStatus)
-            canvas.drawPath(pathGrade, paintGrade);
+        if (serie != null)
+            canvas.drawPath(pathDados, paintDados);
         canvas.drawPath(pathEscala, paintEixos);
         atualizaTextosEixos(canvas);
         if (cursorStatus) {

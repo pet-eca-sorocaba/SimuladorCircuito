@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Circuito;
+import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Ponto;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Grafico;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
@@ -53,25 +55,14 @@ public class SimuladorCircuito extends LinearLayout {
             }
         });
 
-        circuito.post(new Runnable() {
+        circuito.setOnTouchListener(new OnTouchListener() {
             @Override
-            public void run() {
-                circuito.iniciar(4);
-                circuito.grade(3);
+            public boolean onTouch(View view, MotionEvent event) {
+                circuito.ToqueNaTela(event);
+                Toast.makeText(getContext(), Integer.toString(circuito.selecionado()), Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
-
-//        final int[] val = {1};
-//        circuito.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                graficoUm.setPeriodos(val[0]%4 + 1);
-//                graficoDois.setPeriodos((val[0] +1)%4 + 1);
-//                val[0] = val[0] + 1;
-//                graficoUm.setCursorWidth(val[0]);// DEIXAR MODIFICAVEL
-//                graficoDois.setCursorWidth(val[0]); // DEIXAR MODIFICAVEL
-//            }
-//        });
     }
 
     public void setNomesEixoY(String nome, String nomeDois) {
