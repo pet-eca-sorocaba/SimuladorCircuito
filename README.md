@@ -7,17 +7,8 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        double[] valores_x = new double[255];
-        valores = new double[255];
-        valoresY = new double[255];
-
-        for (int i = 0; i < 255; i++) {
-            valores_x[i] = (2 * Math.PI * i) / 255;
-            valores[i] = Math.sin(valores_x[i]);
-            valoresY[i] = Math.cos(valores_x[i]);
-        }
-
         setContentView(R.layout.activity_main);
+        
         simulador = findViewById(R.id.simulador);
         simulador.addSerie(new Serie(valoresY, 250), 2);
         simulador.setNomesEixoY("V", "A");
