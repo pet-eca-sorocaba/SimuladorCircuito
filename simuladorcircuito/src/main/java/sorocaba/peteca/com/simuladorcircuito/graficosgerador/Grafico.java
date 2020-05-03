@@ -137,6 +137,7 @@ public class Grafico extends View {
                 }
             }
         }
+        invalidate();
     }
     private void atualizaGrade() {
         pathGrade.reset();
@@ -172,15 +173,18 @@ public class Grafico extends View {
 
     public void addSerie(Serie serie) {
         this.serie = serie;
+        atualizaDados();
     }
     public void addSerie(Serie serie, Serie serieDois) {
         this.serie = serie;
         this.serieDois = serieDois;
+        atualizaDados();
     }
     public void addSerie(Serie serie, Serie serieDois, Serie serieTres) {
         this.serie = serie;
         this.serieDois = serieDois;
         this.serieTres = serieTres;
+        atualizaDados();
     }
     public void removeSerie() {
         this.serie = null;
@@ -292,7 +296,6 @@ public class Grafico extends View {
         }
         atualizaEscala();
         atualizaDados();
-        invalidate();
     }
 
     public void setGradeStatus(boolean gradeStatus) {

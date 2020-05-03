@@ -1,25 +1,34 @@
 package sorocaba.peteca.com.simuladorcircuito;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Circuito;
-import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Ponto;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Grafico;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
-public class SimuladorCircuito extends LinearLayout {
+public class SimuladorCircuito extends LinearLayout implements Circuito.InterfaceCircuito{
     private Grafico graficoUm;
     private Grafico graficoDois;
     private Circuito circuito;
     private Resultados resultados;
+
+    IntefaceSimulador intefaceSimulador;
+
+    public void setSimuladorListener(IntefaceSimulador intefaceSimulador) {
+        this.intefaceSimulador = intefaceSimulador;
+    }
+
+    public interface IntefaceSimulador {
+        void componenteClickado(int componente);
+        int carregaCircuito(Circuito circuito);
+    }
+
 
     public SimuladorCircuito(Context context) {
         super(context);
@@ -36,6 +45,7 @@ public class SimuladorCircuito extends LinearLayout {
         graficoUm = findViewById(R.id.graficoUm);
         graficoDois = findViewById(R.id.graficoDois);
         circuito = view.findViewById(R.id.circuito);
+        circuito.setCircuitoListener(this);
 
         graficoUm.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -59,12 +69,20 @@ public class SimuladorCircuito extends LinearLayout {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 circuito.ToqueNaTela(event);
-                Toast.makeText(getContext(), Integer.toString(circuito.selecionado()), Toast.LENGTH_SHORT).show();
+                intefaceSimulador.componenteClickado(circuito.selecionado());
                 return true;
             }
         });
     }
 
+    @Override
+    public int circuitoPronto() {
+        int componente = intefaceSimulador.carregaCircuito(circuito);
+        intefaceSimulador.componenteClickado(componente);
+        return componente;
+    }
+
+    //region getters e setters
     public void setNomesEixoY(String nome, String nomeDois) {
         graficoUm.setNomeEixoY(nome);
         graficoDois.setNomeEixoY(nomeDois);
@@ -160,6 +178,7 @@ public class SimuladorCircuito extends LinearLayout {
             graficoDois.removeSerie();
         }
     }
+    //endregion
 }
 
 //    private DecimalFormat df;

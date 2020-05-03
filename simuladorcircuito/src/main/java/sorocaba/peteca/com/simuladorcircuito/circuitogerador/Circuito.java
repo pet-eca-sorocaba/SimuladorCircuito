@@ -29,6 +29,16 @@ public class Circuito extends View {
     int raioGrade = 2;
     private Paint paintDesenho;
 
+    InterfaceCircuito interfaceCircuito;
+
+    public void setCircuitoListener(InterfaceCircuito interfaceCircuito) {
+        this.interfaceCircuito = interfaceCircuito;
+    }
+
+    public interface InterfaceCircuito {
+        int circuitoPronto();
+    }
+
     public Circuito(Context context) {
         super(context);
         init();
@@ -86,11 +96,6 @@ public class Circuito extends View {
         }
     }
 
-    public String dimensoes() {
-        return (orientacaoVertical ? ("X =" + (segundaDivisao - 1) + " Y=" + (divisao - 1)) : ("X =" + (divisao - 1) + " Y=" + (segundaDivisao - 1)));
-    }
-    //endregion
-
     public void componente(Ponto pontoUm, Ponto pontoDois, int componente, int numeroItem) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
             Path path = desenhar.componente(pontoUm, pontoDois, componente); // Ele atualiza os valores dos pontos
@@ -100,6 +105,11 @@ public class Circuito extends View {
             }
         }
     }
+
+    public String dimensoes() {
+        return (orientacaoVertical ? ("X =" + (segundaDivisao - 1) + " Y=" + (divisao - 1)) : ("X =" + (divisao - 1) + " Y=" + (segundaDivisao - 1)));
+    }
+    //endregion
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -118,7 +128,6 @@ public class Circuito extends View {
         }
         super.onDraw(canvas);
     }
-
     @Override
     protected void onSizeChanged(int larguraTotal, int alturaTotal, int oldw, int oldh) {
         matrizPontos.clear();
@@ -151,18 +160,17 @@ public class Circuito extends View {
         //TODO: ELE VAI PUXAR TODA A CONFIGURAÇÃO DE COMPONENTES PARA PINTAR E ARMAZENAR NO PATH
         //TODO: DAI O RESTO DA CLASSE FICA PARA MANDAR MENSAGENS E CONTROLES BLABLABLABLABLA
 
-        componente(new Ponto(8, 6), new Ponto(8, 4), 1, 1);
-        trilha(new Ponto(8, 4), new Ponto(8, 2), new Ponto(10, 2));
-        componente(new Ponto(10, 2), new Ponto(12, 2), 1, 2);
-        trilha(new Ponto(12, 2), new Ponto(14, 2), new Ponto(14, 4));
-        componente(new Ponto(14, 4), new Ponto(14, 6), 1, 3);
-        trilha(new Ponto(14, 6), new Ponto(14, 8), new Ponto(12, 8));
-        componente(new Ponto(12, 8), new Ponto(10, 8), 1, 4);
-        trilha(new Ponto(10, 8), new Ponto(8, 8), new Ponto(8, 6));
-
+        pathLists.clear();
+        ultimoSelecionado = interfaceCircuito.circuitoPronto();
+        for (Item item: itemList) {
+            if (item.numeroItem == ultimoSelecionado) {
+                DesenhaSelecionado(item.ponto);
+            }
+        }
         super.onSizeChanged(larguraTotal, alturaTotal, oldw, oldh);
     }
 
+    //region Tratamento do Toque
     public void ToqueNaTela(MotionEvent event) {
         for (int elemento = 0; elemento < itemList.size(); elemento++) {
             if (event.getX() >= (itemList.get(elemento).ponto.X - tamanhoMinimo) && (event.getX() <= itemList.get(elemento).ponto.X + tamanhoMinimo) &&
@@ -178,9 +186,10 @@ public class Circuito extends View {
         RectF rectF = new RectF(ponto.X - tamanhoMinimo, ponto.Y - tamanhoMinimo, ponto.X + tamanhoMinimo, ponto.Y + tamanhoMinimo);
         pathSelecao.addRect(rectF, Path.Direction.CCW);
     }
-    public int selecionado() { //TODO: ISSO VAI SER UMA INTERFACE COM ALGO A MAIS
+    public int selecionado() {
         return ultimoSelecionado;
     }
+    //endregion
 }
 
 //public class Circuito extends View {

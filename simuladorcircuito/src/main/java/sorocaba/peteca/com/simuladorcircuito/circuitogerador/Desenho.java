@@ -3,7 +3,7 @@ package sorocaba.peteca.com.simuladorcircuito.circuitogerador;
 import android.graphics.Path;
 import android.graphics.RectF;
 
-class Desenho {
+public class Desenho {
     private int tamanhoMinimo;
 
     enum Orientacao {

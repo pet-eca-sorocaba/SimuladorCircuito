@@ -2,19 +2,23 @@ package sorocaba.peteca.com.circuitosimulacao;
 
 import androidx.appcompat.app.AppCompatActivity;
 import sorocaba.peteca.com.simuladorcircuito.SimuladorCircuito;
+import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Circuito;
+import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Ponto;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
 import android.graphics.Color;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SimuladorCircuito.IntefaceSimulador {
+    double[] valores, valoresY;
+    SimuladorCircuito simulador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         double[] valores_x = new double[255];
-        double[] valores = new double[255];
-        double[] valoresY = new double[255];
+        valores = new double[255];
+        valoresY = new double[255];
 
         for (int i = 0; i < 255; i++) {
             valores_x[i] = (2 * Math.PI * i) / 255;
@@ -23,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
-        SimuladorCircuito simulador = findViewById(R.id.simulador);
-        simulador.addSerie(new Serie(valores, 250), new Serie(valoresY), 1);
+        simulador = findViewById(R.id.simulador);
         simulador.addSerie(new Serie(valoresY, 250), 2);
         simulador.setNomesEixoY("V", "A");
         simulador.setNomesEixoX("ωt", "ωt");
@@ -42,17 +45,30 @@ public class MainActivity extends AppCompatActivity {
         simulador.setColorTensaoTres(Color.BLACK);
         simulador.setColorCorrente(Color.RED);
 
-//        circuito.iniciar(9);
-//        circuito.grade(3);
-//        circuito.add("Fonte", circuito.Ponto(4,5), circuito.Ponto(6,5), paint, 1);
-//        circuito.add("Trilha", circuito.Ponto(4,5), circuito.Ponto(2,5), paint);
-//        circuito.add("Trilha", circuito.Ponto(2,5), circuito.Ponto(2,11), paint);
-//        circuito.add("Tiristor", circuito.Ponto(2,11), circuito.Ponto(2,13), paint, 4);
-//        circuito.add("Trilha", circuito.Ponto(2,13), circuito.Ponto(2,18), paint);
-//        circuito.add("Trilha", circuito.Ponto(2,18), circuito.Ponto(4,18), paint);
-//        circuito.add("CargaR", circuito.Ponto(4,18), circuito.Ponto(6,18), paint, 10);
-//        circuito.add("Trilha", circuito.Ponto(6,18), circuito.Ponto(8,18), paint);
-//        circuito.add("Trilha", circuito.Ponto(8,18), circuito.Ponto(8,5), paint);
-//        circuito.add("Trilha", circuito.Ponto(8,5), circuito.Ponto(6,5), paint);
+        simulador.setSimuladorListener(this);
     }
+
+    @Override
+    public void componenteClickado(int componente) {
+        if (componente == 1) {
+            simulador.addSerie(new Serie(valores, 250), 1);
+        } else {
+            simulador.addSerie(new Serie(valoresY, 15), 1);
+        }
+    }
+
+    @Override
+    public int carregaCircuito(Circuito circuito) {
+        circuito.componente(new Ponto(8, 6), new Ponto(8, 4), 1, 1);
+        circuito.trilha(new Ponto(8, 4), new Ponto(8, 2), new Ponto(10, 2));
+        circuito.componente(new Ponto(10, 2), new Ponto(12, 2), 1, 2);
+        circuito.trilha(new Ponto(12, 2), new Ponto(14, 2), new Ponto(14, 4));
+        circuito.componente(new Ponto(14, 4), new Ponto(14, 6), 1, 3);
+        circuito.trilha(new Ponto(14, 6), new Ponto(14, 8), new Ponto(12, 8));
+        circuito.componente(new Ponto(12, 8), new Ponto(10, 8), 1, 4);
+        circuito.trilha(new Ponto(10, 8), new Ponto(8, 8), new Ponto(8, 6));
+        return 1;
+    }
+
+
 }
