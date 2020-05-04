@@ -8,6 +8,7 @@ import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements SimuladorCircuito.IntefaceSimulador {
     double[] valores, valoresY;
@@ -28,11 +29,12 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
 
         setContentView(R.layout.activity_main);
         simulador = findViewById(R.id.simulador);
+        simulador.setStatusGrade(true);
         simulador.addSerie(new Serie(valoresY, 250), 2);
         simulador.setNomesEixoY("V", "A");
         simulador.setNomesEixoX("ωt", "ωt");
         simulador.setCursorConfig(Color.BLUE, 3);
-        simulador.setCursorStatus(true);
+        simulador.setCursorStatus(false);
         //simulador.setPeriodos(1);
         simulador.setEixosWidth(5);
         simulador.setEixosHeigthMarcacoes(0.05f);

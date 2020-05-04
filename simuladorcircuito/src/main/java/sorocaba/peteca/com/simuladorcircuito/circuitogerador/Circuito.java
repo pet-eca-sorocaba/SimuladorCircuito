@@ -21,13 +21,13 @@ public class Circuito extends View {
     private Desenho desenhar;
     private RectF rectF;
 
-    private List<Ponto> matrizPontos = new ArrayList<>(); //TODO: VOU APAGAR DPS
-    private List<Path> pathLists = new ArrayList<>();
+    private List<Path> pathTrilhas = new ArrayList<>();
     private List<Item> itemList = new ArrayList<>();
 
     // VARIAVEIS QUE O USUARIO PODE MUDAR
     private Paint paintDesenho;
-    int raioGrade = 2;
+    private int raioGrade = 2;
+    private boolean statusGrade = false;
 
     InterfaceCircuito interfaceCircuito;
     public void setCircuitoListener(InterfaceCircuito interfaceCircuito) {
@@ -69,28 +69,19 @@ public class Circuito extends View {
     }
 
     //region TA OK
-
-    public void grade() {
-        pathGrade.reset();
-        for (int i = 0; i < matrizPontos.size(); i++) {
-            Ponto ponto = matrizPontos.get(i);
-            pathGrade.addCircle(ponto.X, ponto.Y, raioGrade, Path.Direction.CCW);
-        }
-    }
-
     private boolean isValid(Ponto ponto) {
         return (orientacaoVertical) ? (ponto.X > 0 && ponto.X < segundaDivisao) && (ponto.Y > 0 && ponto.Y < divisao) : (ponto.X > 0 && ponto.X < divisao) && (ponto.Y > 0 && ponto.Y < segundaDivisao);
     }
 
     public void trilha(Ponto pontoUm, Ponto pontoDois) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
-            pathLists.add(desenhar.Trilha(pontoUm, pontoDois));
+            pathTrilhas.add(desenhar.Trilha(pontoUm, pontoDois));
         }
     }
 
     public void trilha(Ponto pontoUm, Ponto pontoDois, Ponto pontoTres) {
         if (isValid(pontoUm) && isValid(pontoDois)) {
-            pathLists.add(desenhar.Trilha(pontoUm, pontoDois, pontoTres));
+            pathTrilhas.add(desenhar.Trilha(pontoUm, pontoDois, pontoTres));
         }
     }
 
@@ -98,8 +89,8 @@ public class Circuito extends View {
         if (isValid(pontoUm) && isValid(pontoDois)) {
             Path path = desenhar.componente(pontoUm, pontoDois, componente); // Ele atualiza os valores dos pontos
             if (path != null) {
-                pathLists.add(path);
-                itemList.add(new Item(numeroItem, new Ponto((pontoUm.X + pontoDois.X) / 2, (pontoUm.Y + pontoDois.Y) / 2)));
+                pathTrilhas.add(path);
+                itemList.add(new Item(numeroItem, path, new Ponto((pontoUm.X + pontoDois.X) / 2, (pontoUm.Y + pontoDois.Y) / 2)));
             }
         }
     }
@@ -118,11 +109,13 @@ public class Circuito extends View {
         }
         invalidate();
     }
+
     private void DesenhaSelecionado(Ponto ponto) {
         pathSelecao.reset();
-        RectF rectF = new RectF(ponto.X - 1.2f*tamanhoMinimo, ponto.Y - 1.2f*tamanhoMinimo, ponto.X + 1.2f*tamanhoMinimo, ponto.Y + 1.2f*tamanhoMinimo);
+        RectF rectF = new RectF(ponto.X - 1.2f * tamanhoMinimo, ponto.Y - 1.2f * tamanhoMinimo, ponto.X + 1.2f * tamanhoMinimo, ponto.Y + 1.2f * tamanhoMinimo);
         pathSelecao.addRect(rectF, Path.Direction.CCW);
     }
+
     public int selecionado() {
         return ultimoSelecionado;
     }
@@ -131,12 +124,19 @@ public class Circuito extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawRect(rectF, paintFundo);
-        canvas.drawPath(pathGrade, paintGrade);
+        if(statusGrade)
+            canvas.drawPath(pathGrade, paintGrade);
 
-        for (int i = 0; i < pathLists.size(); i++) {
-            Path path = this.pathLists.get(i);
-            if (path != null) {
+        for (int i = 0; i < pathTrilhas.size(); i++) {
+            Path path = this.pathTrilhas.get(i);
+            if (path != null)
                 canvas.drawPath(path, paintDesenho);
+        }
+
+        for (Item item: itemList) {
+            if (item.path != null) {
+                //TODO: Logica das cores ajustaveis tem que sair daqui
+                canvas.drawPath(item.path, paintDesenho);
             }
         }
 
@@ -147,15 +147,15 @@ public class Circuito extends View {
     }
     @Override
     protected void onSizeChanged(int larguraTotal, int alturaTotal, int oldw, int oldh) {
-        matrizPontos.clear();
+        pathGrade.reset();
         if (larguraTotal > alturaTotal) { // retangulo deitado
             tamanhoMinimo = alturaTotal / divisao;
             orientacaoVertical = true;
             segundaDivisao = larguraTotal / tamanhoMinimo;
 
-            for (int linha = 1; linha < divisao; linha++) {// A LOGICA É APAGAR ISSO DEPOIS
+            for (int linha = 1; linha < divisao; linha++) {
                 for (int coluna = 1; coluna < segundaDivisao; coluna++) {
-                    matrizPontos.add(new Ponto(coluna * tamanhoMinimo, linha * tamanhoMinimo));
+                    pathGrade.addCircle(coluna * tamanhoMinimo, linha * tamanhoMinimo, raioGrade, Path.Direction.CCW);
                 }
             }
 
@@ -166,21 +166,17 @@ public class Circuito extends View {
 
             for (int linha = 1; linha < segundaDivisao; linha++) {
                 for (int coluna = 1; coluna < divisao; coluna++) {
-                    matrizPontos.add(new Ponto(coluna * tamanhoMinimo, linha * tamanhoMinimo));
+                    pathGrade.addCircle(coluna * tamanhoMinimo, linha * tamanhoMinimo, raioGrade, Path.Direction.CCW);
                 }
             }
         }
 
-        grade();
         desenhar = new Desenho(tamanhoMinimo);
-        //TODO: A LOGICA SERIA COLOCAR TUDO AQUI, QUANDO A CLASSE SABE O TAMANHO
-        //TODO: ELE VAI PUXAR TODA A CONFIGURAÇÃO DE COMPONENTES PARA PINTAR E ARMAZENAR NO PATH
-        //TODO: DAI O RESTO DA CLASSE FICA PARA MANDAR MENSAGENS E CONTROLES BLABLABLABLABLA
 
         rectF = new RectF(0, 0, larguraTotal, alturaTotal);
-        pathLists.clear();
+        pathTrilhas.clear();
         ultimoSelecionado = interfaceCircuito.circuitoPronto();
-        for (Item item: itemList) {
+        for (Item item : itemList) {
             if (item.numeroItem == ultimoSelecionado) {
                 DesenhaSelecionado(item.ponto);
             }
@@ -188,11 +184,15 @@ public class Circuito extends View {
         super.onSizeChanged(larguraTotal, alturaTotal, oldw, oldh);
     }
 
+    //region getters e setters
     public void setStrokeWidth(int width) {
         paintDesenho.setStrokeWidth(width);
     }
     public void setColor(int color) {
         paintDesenho.setColor(color);
+    }
+    public void setDivisao(int divisao) {
+        this.divisao = divisao;
     }
     public void setColorPrincipal(int color) {
     }//TODO: PRECISAR ACHAR UMA MANEIRA DE DEIXAR AS FONTES COLORIDAS
@@ -200,4 +200,11 @@ public class Circuito extends View {
     }
     public void setColorTerciario(int color) {
     }
+    public void setRaioGrade(int raioGrade) {
+        this.raioGrade = raioGrade;
+    }
+    public void setStatusGrade(boolean statusGrade) {
+        this.statusGrade = statusGrade;
+    }
+    //endregion
 }

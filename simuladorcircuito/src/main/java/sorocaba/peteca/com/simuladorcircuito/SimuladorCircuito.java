@@ -43,10 +43,13 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     private void init(Context context) {
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = mInflater.inflate(R.layout.layout_principal, this, true);
-        graficoUm = findViewById(R.id.graficoUm);
-        graficoDois = findViewById(R.id.graficoDois);
+        graficoUm = view.findViewById(R.id.graficoUm);
+        graficoDois = view.findViewById(R.id.graficoDois);
+        resultados = view.findViewById(R.id.resultados);
         circuito = view.findViewById(R.id.circuito);
         circuito.setCircuitoListener(this);
+
+        resultados.atualizarDados(125.351531512, 125.23424252, 76.33151355);
 
         graficoUm.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -98,10 +101,12 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoUm.setCursorWidth(width);
         graficoDois.setCursorColor(color);
         graficoDois.setCursorWidth(width);
+        resultados.setColorAngulo(color);
     }
     public void setCursorStatus (boolean status) {
         graficoUm.setCursorStatus(status);
         graficoDois.setCursorStatus(status);
+        resultados.setStatus(status);
     }
 
     public void setPeriodos(int periodos) {
@@ -141,6 +146,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     public void setColorTensaoUm(int color) {
         graficoUm.setColorPrincipal(color);
         circuito.setColorPrincipal(color);
+        resultados.setColorTensao(color);
     }
     public void setColorTensaoDois(int color) {
         graficoUm.setColorSecundario(color);
@@ -152,6 +158,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     }
     public void setColorCorrente(int color) {
         graficoDois.setColorPrincipal(color);
+        resultados.setColorCorrente(color);
     }
 
     public void addSerie(Serie serie, int grafico) {
@@ -188,6 +195,17 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     }
     public void setCircuitoColor(int color) {
         circuito.setColor(color);
+    }
+
+    public void setRaioGrade(int raioGrade) {
+        circuito.setRaioGrade(raioGrade);
+    }
+    public void setStatusGrade(boolean statusGrade) {
+        circuito.setStatusGrade(statusGrade);
+    }
+
+    public String getCircuitoDimensoes () {
+        return circuito.dimensoes();
     }
     //endregion
 }

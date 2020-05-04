@@ -28,7 +28,6 @@ public class Grafico extends View {
     private float tamanhoMarcacoes = 0.05f, tamanhoText = 1.5f, subtamanhoText = 1.3f;
     private Serie serie, serieDois, serieTres;
 
-    //region TA OK
     public Grafico(Context context) {
         super(context);
         init();
@@ -90,6 +89,7 @@ public class Grafico extends View {
         rect = new Rect();
     }
 
+    //region TA OK
     private void atualizaEscala() {
         pathEscala.reset();
         for (int i = 1; i <= periodos; i++) {
