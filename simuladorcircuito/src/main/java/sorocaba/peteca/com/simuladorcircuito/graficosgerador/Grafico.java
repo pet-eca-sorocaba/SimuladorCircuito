@@ -28,6 +28,7 @@ public class Grafico extends View {
     private boolean cursorStatus = false, gradeStatus = false, betaAtivado = false;
     private float tamanhoMarcacoes = 0.05f, tamanhoText = 1.5f, subtamanhoText = 1.3f;
     public Serie serie, serieDois, serieTres;
+    private boolean animacao;
 
     public Grafico(Context context) {
         super(context);
@@ -225,14 +226,18 @@ public class Grafico extends View {
         canvas.drawRect(rect, paintEixos);
         paintEixos.setColor(Color.BLACK);
         canvas.drawPath(pathEixos, paintEixos);
-        if (gradeStatus)
-            canvas.drawPath(pathGrade, paintGrade);
-        if (serieDois != null)
-            canvas.drawPath(pathDadosDois, paintDadosDois);
-        if (serieTres != null)
-            canvas.drawPath(pathDadosTres, paintDadosTres);
-        if (serie != null)
-            canvas.drawPath(pathDados, paintDados);
+        if (!animacao) {
+            if (gradeStatus)
+                canvas.drawPath(pathGrade, paintGrade);
+            if (serieDois != null)
+                canvas.drawPath(pathDadosDois, paintDadosDois);
+            if (serieTres != null)
+                canvas.drawPath(pathDadosTres, paintDadosTres);
+            if (serie != null)
+                canvas.drawPath(pathDados, paintDados);
+        } else {
+            
+        }
         canvas.drawPath(pathEscala, paintEixos);
         atualizaTextosEixos(canvas);
         if (cursorStatus) {
@@ -388,6 +393,10 @@ public class Grafico extends View {
 
     public double pegaAnguloAtual() {
         return (ultimoPonto*2*Math.PI)/serie.tamanho;
+    }
+
+    public void setAnimacao(boolean animacao) {
+        this.animacao = animacao;
     }
     //endregion
 }

@@ -76,5 +76,10 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
         return 1;
     }
 
+    @Override
+    public void animacaoCircuito(Circuito circuito) {
+
+    }
+
 
 }

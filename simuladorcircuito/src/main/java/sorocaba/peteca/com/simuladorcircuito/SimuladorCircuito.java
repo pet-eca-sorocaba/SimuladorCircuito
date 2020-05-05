@@ -18,6 +18,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     private Grafico graficoDois;
     private Circuito circuito;
     private Resultados resultados;
+    private boolean animacao = false;
 
     IntefaceSimulador intefaceSimulador;
 
@@ -28,6 +29,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     public interface IntefaceSimulador {
         void componenteClickado(int componente);
         int carregaCircuito(Circuito circuito);
+        void animacaoCircuito(Circuito circuito);
     }
 
     public SimuladorCircuito(Context context) {
@@ -51,9 +53,11 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoUm.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                graficoUm.changeCursor(event);
-                graficoDois.setCursor(graficoUm.getCursor());
-                resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(),graficoUm.pegaAnguloAtual());
+                if (!animacao) {
+                    graficoUm.changeCursor(event);
+                    graficoDois.setCursor(graficoUm.getCursor());
+                    resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(),graficoUm.pegaAnguloAtual());
+                }
                 return true;
             }
         });
@@ -61,9 +65,11 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoDois.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                graficoDois.changeCursor(event);
-                graficoUm.setCursor(graficoDois.getCursor());
-                resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoDois.pegaAnguloAtual());
+                if (!animacao) {
+                    graficoDois.changeCursor(event);
+                    graficoUm.setCursor(graficoDois.getCursor());
+                    resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoDois.pegaAnguloAtual());
+                }
                 return true;
             }
         });
@@ -211,6 +217,12 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
 
     public String getCircuitoDimensoes () {
         return circuito.dimensoes();
+    }
+
+    public void setAnimacao (boolean animacao) {
+        this.animacao = animacao;
+        graficoUm.setAnimacao(animacao);
+        circuito.setAnimacao(animacao);
     }
     //endregion
 }

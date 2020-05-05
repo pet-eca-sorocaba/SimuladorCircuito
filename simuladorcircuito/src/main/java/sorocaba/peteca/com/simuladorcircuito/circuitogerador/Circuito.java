@@ -27,12 +27,14 @@ public class Circuito extends View {
     // VARIAVEIS QUE O USUARIO PODE MUDAR
     private Paint paintDesenho;
     private int raioGrade = 2;
-    private boolean statusGrade = false;
+    private boolean statusGrade = false, animacao = false;
 
     InterfaceCircuito interfaceCircuito;
+
     public void setCircuitoListener(InterfaceCircuito interfaceCircuito) {
         this.interfaceCircuito = interfaceCircuito;
     }
+
     public interface InterfaceCircuito {
         int circuitoPronto();
     }
@@ -126,7 +128,6 @@ public class Circuito extends View {
         canvas.drawRect(rectF, paintFundo);
         if(statusGrade)
             canvas.drawPath(pathGrade, paintGrade);
-
         for (int i = 0; i < pathTrilhas.size(); i++) {
             Path path = this.pathTrilhas.get(i);
             if (path != null)
@@ -208,6 +209,9 @@ public class Circuito extends View {
     }
     public void setStatusGrade(boolean statusGrade) {
         this.statusGrade = statusGrade;
+    }
+    public void setAnimacao(boolean animacao) {
+        this.animacao = animacao;
     }
     //endregion
 }
