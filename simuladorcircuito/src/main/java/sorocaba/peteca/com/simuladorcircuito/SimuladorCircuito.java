@@ -231,7 +231,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         return circuito.dimensoes();
     }
 
-    public boolean startAnimacao() {
+    public boolean startAnimacao() { //TODO: PAREI AQUI
         this.animacao = true;
         if ((graficoUm.serie != null) && (graficoDois != null)) {
             graficoUm.startAnimacao();
@@ -258,6 +258,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
                     graficoUm.startAnimacao();
                     graficoDois.startAnimacao();
                     circuito.startAnimacao();
+                    resultados.limpar();
                     resultados.setStatus(false);
                     counter.start();
                 }
