@@ -1,24 +1,28 @@
 package sorocaba.peteca.com.simuladorcircuito;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Circuito;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Grafico;
 import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
-public class SimuladorCircuito extends LinearLayout implements Circuito.InterfaceCircuito{
+public class SimuladorCircuito extends LinearLayout implements Circuito.InterfaceCircuito {
     private Grafico graficoUm;
     private Grafico graficoDois;
     private Circuito circuito;
     private Resultados resultados;
-    private boolean animacao = false;
+    private boolean animacao = false, cursorStatus = false;
+    private long tempoAnimacao = 2000;
+    private CountDownTimer counter;
 
     IntefaceSimulador intefaceSimulador;
 
@@ -26,16 +30,11 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         this.intefaceSimulador = intefaceSimulador;
     }
 
-    public interface IntefaceSimulador {
-        void componenteClickado(int componente);
-        int carregaCircuito(Circuito circuito);
-        void animacaoCircuito(Circuito circuito);
-    }
-
     public SimuladorCircuito(Context context) {
         super(context);
         init(context);
     }
+
     public SimuladorCircuito(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
@@ -56,7 +55,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
                 if (!animacao) {
                     graficoUm.changeCursor(event);
                     graficoDois.setCursor(graficoUm.getCursor());
-                    resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(),graficoUm.pegaAnguloAtual());
+                    resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoUm.pegaAnguloAtual());
                 }
                 return true;
             }
@@ -96,19 +95,22 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoUm.setNomeEixoY(nome);
         graficoDois.setNomeEixoY(nomeDois);
     }
+
     public void setNomesEixoX(String nome, String nomeDois) {
         graficoUm.setNomeEixoX(nome);
         graficoDois.setNomeEixoX(nomeDois);
     }
 
-    public void setCursorConfig (int color, int width) {
+    public void setCursorConfig(int color, int width) {
         graficoUm.setCursorColor(color);
         graficoUm.setCursorWidth(width);
         graficoDois.setCursorColor(color);
         graficoDois.setCursorWidth(width);
         resultados.setColorAngulo(color);
     }
-    public void setCursorStatus (boolean status) {
+
+    public void setCursorStatus(boolean status) {
+        this.cursorStatus = status;
         graficoUm.setCursorStatus(status);
         graficoDois.setCursorStatus(status);
         resultados.setStatus(status);
@@ -133,6 +135,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoUm.setEixosTextSize(width);
         graficoDois.setEixosTextSize(width);
     }
+
     public void setEixosSubTextSize(float width) {
         graficoUm.setEixosSubTextSize(width);
         graficoDois.setEixosSubTextSize(width);
@@ -153,18 +156,22 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         circuito.setColorPrincipal(color);
         resultados.setColorTensao(color);
     }
+
     public void setColorTensaoDois(int color) {
         graficoUm.setColorSecundario(color);
         circuito.setColorSecundario(color);
     }
+
     public void setColorTensaoTres(int color) {
         graficoUm.setColorTerciario(color);
         circuito.setColorTerciario(color);
     }
+
     public void setColorCorrente(int color) {
         graficoDois.setColorPrincipal(color);
         resultados.setColorCorrente(color);
     }
+
     public void setEspessuraDados(int width) {
         graficoUm.setEspessuraDados(width);
         graficoDois.setEspessuraDados(width);
@@ -179,6 +186,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             resultados.setCorrenteMaxima(serie.valor[serie.max]);
         }
     }
+
     public void addSerie(Serie serie, Serie serieDois, int grafico) {
         if (grafico == 1) {
             graficoUm.addSerie(serie, serieDois);
@@ -186,6 +194,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoDois.addSerie(serie, serieDois);
         }
     }
+
     public void addSerie(Serie serie, Serie serieDois, Serie serieTres, int grafico) {
         if (grafico == 1) {
             graficoUm.addSerie(serie, serieDois, serieTres);
@@ -193,6 +202,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoDois.addSerie(serie, serieDois, serieTres);
         }
     }
+
     public void removeSerie(int grafico) {
         if (grafico == 1) {
             graficoUm.removeSerie();
@@ -204,6 +214,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     public void setCircuitoWidth(int width) {
         circuito.setStrokeWidth(width);
     }
+
     public void setCircuitoColor(int color) {
         circuito.setColor(color);
     }
@@ -211,18 +222,64 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     public void setRaioGrade(int raioGrade) {
         circuito.setRaioGrade(raioGrade);
     }
+
     public void setCircuitoGrade(boolean statusGrade) {
         circuito.setStatusGrade(statusGrade);
     }
 
-    public String getCircuitoDimensoes () {
+    public String getCircuitoDimensoes() {
         return circuito.dimensoes();
     }
 
-    public void setAnimacao (boolean animacao) {
-        this.animacao = animacao;
-        graficoUm.setAnimacao(animacao);
-        circuito.setAnimacao(animacao);
+    public boolean startAnimacao() {
+        this.animacao = true;
+        if ((graficoUm.serie != null) && (graficoDois != null)) {
+            graficoUm.startAnimacao();
+            graficoDois.startAnimacao();
+            circuito.startAnimacao();
+            resultados.setStatus(false);
+            long tickTime = (3 * tempoAnimacao/(graficoUm.serie.tamanho));
+            counter = new CountDownTimer(tempoAnimacao, tickTime) {
+
+                public void onTick(long millisUntilFinished) {
+                    long tStart = System.currentTimeMillis();
+                    graficoUm.animar();
+                    graficoDois.animar();
+                    long tEnd = System.currentTimeMillis();
+                    Log.d("TEMPO CONSUMIDO", String.valueOf(tEnd - tStart));
+                    Log.d("TEMPO em Millis", String.valueOf(millisUntilFinished));
+                    //circuito.animar();
+                }
+
+                public void onFinish() {
+                    graficoUm.animar();
+                    graficoDois.animar();
+                    //circuito.animar();
+                    graficoUm.startAnimacao();
+                    graficoDois.startAnimacao();
+                    circuito.startAnimacao();
+                    resultados.setStatus(false);
+                    counter.start();
+                }
+            }.start();
+            return true;
+        } else {
+            stopAnimacao();
+            return false;
+        }
+    }
+
+    public void stopAnimacao() {
+        this.animacao = false;
+        counter.cancel();
+        graficoUm.stopAnimacao();
+        graficoDois.stopAnimacao();
+        circuito.stopAnimacao();
+        if (cursorStatus) resultados.setStatus(true);
+    }
+
+    public void setAnimacaoTime(long time) {
+        this.tempoAnimacao = time;
     }
     //endregion
 }

@@ -16,8 +16,8 @@ import java.util.List;
 public class Circuito extends View {
     private int divisao = 10, tamanhoMinimo = 0, segundaDivisao = 0, ultimoSelecionado = -1;
     private boolean orientacaoVertical = false;
-    private Path pathGrade, pathSelecao;
-    private Paint paintFundo, paintGrade, paintSelecao;
+    private Path pathGrade, pathSelecao, pathAnimacao;
+    private Paint paintFundo, paintGrade, paintSelecao, paintAnimacao;
     private Desenho desenhar;
     private RectF rectF;
 
@@ -66,8 +66,13 @@ public class Circuito extends View {
         paintDesenho.setColor(Color.BLUE);
         paintDesenho.setStyle(Paint.Style.STROKE);
 
+        paintAnimacao = new Paint();
+        paintAnimacao.setColor(Color.BLUE); //TODO: VAI SER MODIFICAVEL
+        paintAnimacao.setStyle(Paint.Style.FILL_AND_STROKE);
+
         pathGrade = new Path();
         pathSelecao = new Path();
+        pathAnimacao = new Path();
     }
 
     //region TA OK
@@ -123,6 +128,11 @@ public class Circuito extends View {
     }
     //endregion
 
+
+
+
+
+
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawRect(rectF, paintFundo);
@@ -143,6 +153,10 @@ public class Circuito extends View {
 
         if ((ultimoSelecionado > 0) && (pathSelecao != null)) {
             canvas.drawPath(pathSelecao, paintSelecao);
+        }
+
+        if(animacao) {
+            canvas.drawPath(pathAnimacao, paintAnimacao);
         }
         super.onDraw(canvas);
     }
@@ -212,6 +226,11 @@ public class Circuito extends View {
     }
     public void setAnimacao(boolean animacao) {
         this.animacao = animacao;
+    }
+    public void startAnimacao() {
+    }
+
+    public void stopAnimacao() {
     }
     //endregion
 }

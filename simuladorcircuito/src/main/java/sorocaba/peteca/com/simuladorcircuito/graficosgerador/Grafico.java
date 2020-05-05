@@ -166,7 +166,7 @@ public class Grafico extends View {
     private void atualizaPontoDados() {
         if (serie != null) {
             pathPontoDados.reset();
-            pegaPonto();
+            if(!animacao) pegaPonto();
             pathPontoDados.addCircle(cursor, (float) ((serie.valor[(ultimoPonto%serie.tamanho)] / serie.valor[serie.max]) * (alturaPontoY - alturaPontoX) + alturaPontoX), paintDados.getStrokeWidth() * 1.5f, Path.Direction.CW);
         }
     }
@@ -220,27 +220,32 @@ public class Grafico extends View {
         ultimoPonto = (int) ((x * serie.tamanho) / Vm);
     }
 
+    public void animar() {
+        cursor = (ultimoPonto * (larguraPontoX - larguraPontoY) / (serie.tamanho*periodosReais)) + larguraPontoY;
+        changeCursor();
+        pathDados.lineTo(cursor, (float) ((pegaValorAtual() / serie.valor[serie.max]) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+        ultimoPonto += 3 * periodosReais;
+        invalidate();
+    }
+
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         paintEixos.setColor(Color.WHITE);
         canvas.drawRect(rect, paintEixos);
         paintEixos.setColor(Color.BLACK);
         canvas.drawPath(pathEixos, paintEixos);
-        if (!animacao) {
-            if (gradeStatus)
-                canvas.drawPath(pathGrade, paintGrade);
-            if (serieDois != null)
-                canvas.drawPath(pathDadosDois, paintDadosDois);
-            if (serieTres != null)
-                canvas.drawPath(pathDadosTres, paintDadosTres);
-            if (serie != null)
-                canvas.drawPath(pathDados, paintDados);
-        } else {
-            
-        }
+        if (gradeStatus)
+            canvas.drawPath(pathGrade, paintGrade);
+        if (serieDois != null)
+            canvas.drawPath(pathDadosDois, paintDadosDois);
+        if (serieTres != null)
+            canvas.drawPath(pathDadosTres, paintDadosTres);
+        if (serie != null)
+            canvas.drawPath(pathDados, paintDados);
+
         canvas.drawPath(pathEscala, paintEixos);
         atualizaTextosEixos(canvas);
-        if (cursorStatus) {
+        if (cursorStatus || animacao) {
             canvas.drawPath(pathCursor, paintCursor);
             paintDados.setStyle(Paint.Style.FILL_AND_STROKE);
             canvas.drawPath(pathPontoDados, paintDados);
@@ -395,8 +400,22 @@ public class Grafico extends View {
         return (ultimoPonto*2*Math.PI)/serie.tamanho;
     }
 
-    public void setAnimacao(boolean animacao) {
-        this.animacao = animacao;
+    public void startAnimacao() {
+        this.animacao = true;
+        pathDados.reset();
+        pathDados.moveTo(larguraPontoY, (float) ((serie.valor[0] / serie.valor[serie.max]) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
+        ultimoPonto = 0;
+        invalidate();
     }
+
+    public void stopAnimacao() {
+        this.animacao = false;
+        pathDados.reset();
+        cursor = larguraPontoY;
+        changeCursor();
+        atualizaDados();
+    }
+
+
     //endregion
 }

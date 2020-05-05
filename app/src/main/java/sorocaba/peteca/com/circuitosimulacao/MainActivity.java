@@ -1,6 +1,7 @@
 package sorocaba.peteca.com.circuitosimulacao;
 
 import androidx.appcompat.app.AppCompatActivity;
+import sorocaba.peteca.com.simuladorcircuito.IntefaceSimulador;
 import sorocaba.peteca.com.simuladorcircuito.SimuladorCircuito;
 import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Circuito;
 import sorocaba.peteca.com.simuladorcircuito.circuitogerador.Ponto;
@@ -8,8 +9,10 @@ import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity implements SimuladorCircuito.IntefaceSimulador {
+public class MainActivity extends AppCompatActivity implements IntefaceSimulador {
     double[] valores, valoresY;
     SimuladorCircuito simulador;
 
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
         double[] valores_x = new double[255];
         valores = new double[255];
         valoresY = new double[255];
+        final boolean[] animar = {false};
 
         for (int i = 0; i < 255; i++) {
             valores_x[i] = (2 * Math.PI * i) / 255;
@@ -33,14 +37,14 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
         simulador.setNomesEixoX("ωt", "ωt");
         simulador.setCursorConfig(Color.BLUE, 3);
         simulador.setCursorStatus(true);
-        simulador.setPeriodos(4);
+        simulador.setPeriodos(1);
         simulador.setEixosWidth(5);
         simulador.setEixosHeigthMarcacoes(0.05f);
         simulador.setEixosTextSize(1.5f);
         simulador.setEixosSubTextSize(1.3f);
         simulador.setBeta(true);
         simulador.setGraficoGrade(true);
-        simulador.setColorTensaoUm(Color.YELLOW);
+        simulador.setColorTensaoUm(Color.GREEN);
         simulador.setColorTensaoDois(Color.BLUE);
         simulador.setColorTensaoTres(Color.BLACK);
         simulador.setColorCorrente(Color.RED);
@@ -50,6 +54,22 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
         simulador.setCircuitoColor(Color.BLUE);
         simulador.setCircuitoWidth(4);
         simulador.setCircuitoGrade(true);
+        simulador.setAnimacaoTime(2000);
+
+        Button button = findViewById(R.id.button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animar[0] = !animar[0];
+                if (animar[0]) {
+                    simulador.startAnimacao();
+                } else {
+                    simulador.stopAnimacao();
+                }
+
+            }
+        });
     }
 
     @Override

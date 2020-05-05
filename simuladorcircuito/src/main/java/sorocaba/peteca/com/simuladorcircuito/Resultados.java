@@ -12,7 +12,6 @@ import java.text.DecimalFormat;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-
 class Resultados extends ConstraintLayout {
     private TextView textoTensao, textoCorrente, textoAngulo, textoTensaoMax, textoCorrenteMax;
 
@@ -73,6 +72,11 @@ class Resultados extends ConstraintLayout {
             textoCorrente.setVisibility(INVISIBLE);
             textoAngulo.setVisibility(INVISIBLE);
         }
+    }
+    public void limpar() {
+        textoTensao.setText("");
+        textoCorrente.setText("");
+        textoAngulo.setText("");
     }
 
 }
