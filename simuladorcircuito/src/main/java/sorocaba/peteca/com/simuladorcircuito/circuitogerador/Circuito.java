@@ -148,6 +148,10 @@ public class Circuito extends View {
     @Override
     protected void onSizeChanged(int larguraTotal, int alturaTotal, int oldw, int oldh) {
         pathGrade.reset();
+        pathTrilhas.clear();
+        ultimoSelecionado = -1;
+        itemList.clear();
+
         if (larguraTotal > alturaTotal) { // retangulo deitado
             tamanhoMinimo = alturaTotal / divisao;
             orientacaoVertical = true;
@@ -174,7 +178,6 @@ public class Circuito extends View {
         desenhar = new Desenho(tamanhoMinimo);
 
         rectF = new RectF(0, 0, larguraTotal, alturaTotal);
-        pathTrilhas.clear();
         ultimoSelecionado = interfaceCircuito.circuitoPronto();
         for (Item item : itemList) {
             if (item.numeroItem == ultimoSelecionado) {

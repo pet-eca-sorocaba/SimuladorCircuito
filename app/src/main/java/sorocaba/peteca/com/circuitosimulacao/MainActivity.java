@@ -8,7 +8,6 @@ import sorocaba.peteca.com.simuladorcircuito.graficosgerador.Serie;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements SimuladorCircuito.IntefaceSimulador {
     double[] valores, valoresY;
@@ -29,35 +28,38 @@ public class MainActivity extends AppCompatActivity implements SimuladorCircuito
 
         setContentView(R.layout.activity_main);
         simulador = findViewById(R.id.simulador);
-        simulador.setStatusGrade(true);
         simulador.addSerie(new Serie(valoresY, 250), 2);
         simulador.setNomesEixoY("V", "A");
         simulador.setNomesEixoX("ωt", "ωt");
         simulador.setCursorConfig(Color.BLUE, 3);
-        simulador.setCursorStatus(false);
-        //simulador.setPeriodos(1);
+        simulador.setCursorStatus(true);
+        simulador.setPeriodos(4);
         simulador.setEixosWidth(5);
         simulador.setEixosHeigthMarcacoes(0.05f);
         simulador.setEixosTextSize(1.5f);
         simulador.setEixosSubTextSize(1.3f);
         simulador.setBeta(true);
-        simulador.setGradeStatus(true);
+        simulador.setGraficoGrade(true);
         simulador.setColorTensaoUm(Color.YELLOW);
         simulador.setColorTensaoDois(Color.BLUE);
         simulador.setColorTensaoTres(Color.BLACK);
         simulador.setColorCorrente(Color.RED);
+        simulador.setEspessuraDados(5);
 
         simulador.setSimuladorListener(this);
         simulador.setCircuitoColor(Color.BLUE);
         simulador.setCircuitoWidth(4);
+        simulador.setCircuitoGrade(true);
     }
 
     @Override
     public void componenteClickado(int componente) {
         if (componente == 1) {
             simulador.addSerie(new Serie(valores, 250), 1);
+            simulador.addSerie(new Serie(valores, 250), 2);
         } else {
             simulador.addSerie(new Serie(valoresY, 15), 1);
+            simulador.addSerie(new Serie(valoresY, 15), 2);
         }
     }
 

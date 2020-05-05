@@ -14,7 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 
 class Resultados extends ConstraintLayout {
-    private TextView textoTensao, textoCorrente, textoAngulo;
+    private TextView textoTensao, textoCorrente, textoAngulo, textoTensaoMax, textoCorrenteMax;
 
     public Resultados(Context context) {
         super(context);
@@ -27,14 +27,13 @@ class Resultados extends ConstraintLayout {
     private void init(Context context) {
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = mInflater.inflate(R.layout.layout_resultados, this, true);
+        textoTensaoMax = view.findViewById(R.id.texto_tensaoMax);
+        textoCorrenteMax = view.findViewById(R.id.texto_correnteMax);
         textoTensao = view.findViewById(R.id.texto_tensao);
         textoCorrente = view.findViewById(R.id.texto_corrente);
         textoAngulo = view.findViewById(R.id.texto_angulo);
     }
 
-    // CLASSE QUE CONTEM TODAS AS INFORMAÇOES SOBRE O MÉTODO
-    //TODO: POR ENQUANTO, FICA MEIO CAOTICO O MODO DE COMO IMPLEMENTAR E, JÁ PENSANDO
-    // EM COMO FAZER AS "FIACAO" PARA FINALIZAR O APLICATIVO.
     public void setColorTensao(int colorTensao) {
         textoTensao.setTextColor(colorTensao);
     }
@@ -52,6 +51,16 @@ class Resultados extends ConstraintLayout {
         textoTensao.setText("V = " + df.format(tensao) + " V");
         textoCorrente.setText("I = " + df.format(corrente) + " A");
         textoAngulo.setText("ωt = " + df.format(angulo) + " rad");
+    }
+    public void setTensaoMaxima(double tensaoMaxima) {
+        DecimalFormat df;
+        df = new DecimalFormat("0.000");
+        textoTensaoMax.setText("| Vmax | = " + df.format(tensaoMaxima) + " V");
+    }
+    public void setCorrenteMaxima(double correnteMaxima) {
+        DecimalFormat df;
+        df = new DecimalFormat("0.000");
+        textoCorrenteMax.setText("| Imax | = " + df.format(correnteMaxima) + " A");
     }
 
     public void setStatus (boolean status) {

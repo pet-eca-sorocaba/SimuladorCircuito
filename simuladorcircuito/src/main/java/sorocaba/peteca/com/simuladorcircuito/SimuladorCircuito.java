@@ -30,7 +30,6 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         int carregaCircuito(Circuito circuito);
     }
 
-
     public SimuladorCircuito(Context context) {
         super(context);
         init(context);
@@ -49,13 +48,12 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         circuito = view.findViewById(R.id.circuito);
         circuito.setCircuitoListener(this);
 
-        resultados.atualizarDados(125.351531512, 125.23424252, 76.33151355);
-
         graficoUm.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 graficoUm.changeCursor(event);
                 graficoDois.setCursor(graficoUm.getCursor());
+                resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(),graficoUm.pegaAnguloAtual());
                 return true;
             }
         });
@@ -65,6 +63,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             public boolean onTouch(View v, MotionEvent event) {
                 graficoDois.changeCursor(event);
                 graficoUm.setCursor(graficoDois.getCursor());
+                resultados.atualizarDados(graficoUm.pegaValorAtual(), graficoDois.pegaValorAtual(), graficoDois.pegaAnguloAtual());
                 return true;
             }
         });
@@ -138,7 +137,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoDois.setBeta(status);
     }
 
-    public void setGradeStatus(boolean status) {
+    public void setGraficoGrade(boolean status) {
         graficoUm.setGradeStatus(status);
         graficoDois.setGradeStatus(status);
     }
@@ -160,12 +159,18 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoDois.setColorPrincipal(color);
         resultados.setColorCorrente(color);
     }
+    public void setEspessuraDados(int width) {
+        graficoUm.setEspessuraDados(width);
+        graficoDois.setEspessuraDados(width);
+    }
 
     public void addSerie(Serie serie, int grafico) {
         if (grafico == 1) {
             graficoUm.addSerie(serie);
+            resultados.setTensaoMaxima(serie.valor[serie.max]);
         } else if (grafico == 2) {
             graficoDois.addSerie(serie);
+            resultados.setCorrenteMaxima(serie.valor[serie.max]);
         }
     }
     public void addSerie(Serie serie, Serie serieDois, int grafico) {
@@ -200,7 +205,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     public void setRaioGrade(int raioGrade) {
         circuito.setRaioGrade(raioGrade);
     }
-    public void setStatusGrade(boolean statusGrade) {
+    public void setCircuitoGrade(boolean statusGrade) {
         circuito.setStatusGrade(statusGrade);
     }
 
@@ -209,6 +214,3 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     }
     //endregion
 }
-
-//    private DecimalFormat df;
-//        df = new DecimalFormat("0.000");
