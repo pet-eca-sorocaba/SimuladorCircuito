@@ -85,14 +85,14 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
 
     @Override
     public int carregaCircuito(Circuito circuito) {
-        circuito.componente(new Ponto(8, 6), new Ponto(8, 4), 1, 1);
-        circuito.trilha(new Ponto(8, 4), new Ponto(8, 2), new Ponto(10, 2));
-        circuito.componente(new Ponto(10, 2), new Ponto(12, 2), 1, 2);
-        circuito.trilha(new Ponto(12, 2), new Ponto(14, 2), new Ponto(14, 4));
-        circuito.componente(new Ponto(14, 4), new Ponto(14, 6), 1, 3);
-        circuito.trilha(new Ponto(14, 6), new Ponto(14, 8), new Ponto(12, 8));
-        circuito.componente(new Ponto(12, 8), new Ponto(10, 8), 1, 4);
-        circuito.trilha(new Ponto(10, 8), new Ponto(8, 8), new Ponto(8, 6));
+        circuito.componente(new Ponto(8, 7), new Ponto(8, 3), 5, 1);
+        circuito.trilha(new Ponto(8, 3), new Ponto(8, 2), new Ponto(9, 2));
+        circuito.componente(new Ponto(9, 2), new Ponto(13, 2), 5, 2);
+        circuito.trilha(new Ponto(13, 2), new Ponto(14, 2), new Ponto(14, 3));
+        circuito.componente(new Ponto(14, 3), new Ponto(14, 7), 5, 3);
+        circuito.trilha(new Ponto(14, 7), new Ponto(14, 8), new Ponto(13, 8));
+        circuito.componente(new Ponto(13, 8), new Ponto(9, 8), 5, 4);
+        circuito.trilha(new Ponto(9, 8), new Ponto(8, 8), new Ponto(8, 7));
         return 1;
     }
 

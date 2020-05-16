@@ -128,11 +128,6 @@ public class Circuito extends View {
     }
     //endregion
 
-
-
-
-
-
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawRect(rectF, paintFundo);

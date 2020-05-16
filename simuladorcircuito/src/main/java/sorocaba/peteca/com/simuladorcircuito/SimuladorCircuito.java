@@ -238,7 +238,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoDois.startAnimacao();
             circuito.startAnimacao();
             resultados.setStatus(false);
-            long tickTime = (3 * tempoAnimacao/(graficoUm.serie.tamanho));
+            long tickTime = (3 * graficoUm.periodosReais * tempoAnimacao/(graficoUm.serie.tamanho));
             counter = new CountDownTimer(tempoAnimacao, tickTime) {
 
                 public void onTick(long millisUntilFinished) {
