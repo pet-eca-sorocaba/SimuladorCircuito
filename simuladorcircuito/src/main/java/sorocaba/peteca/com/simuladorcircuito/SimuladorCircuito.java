@@ -25,6 +25,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     private CountDownTimer counter;
 
     IntefaceSimulador intefaceSimulador;
+    private boolean OndasStatus;
 
     public void setSimuladorListener(IntefaceSimulador intefaceSimulador) {
         this.intefaceSimulador = intefaceSimulador;
@@ -155,7 +156,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoUm.setColorPrincipal(color);
         circuito.setColorPrincipal(color);
         resultados.setColorTensao(color);
-    }
+    }//TODO: TEM PROBLEMA AQUI
 
     public void setColorTensaoDois(int color) {
         graficoUm.setColorSecundario(color);
@@ -211,12 +212,20 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         }
     }
 
+    public void setOndasSimultaneas (boolean status) {
+        circuito.setCoresAjustaveis(status);
+        this.OndasStatus = status;
+    }
+
     public void setCircuitoWidth(int width) {
         circuito.setStrokeWidth(width);
     }
 
     public void setCircuitoColor(int color) {
         circuito.setColor(color);
+    }
+    public void setCircuitoAnimColor(int color){
+        circuito.setColorAnimacao(color);
     }
 
     public void setRaioGrade(int raioGrade) {

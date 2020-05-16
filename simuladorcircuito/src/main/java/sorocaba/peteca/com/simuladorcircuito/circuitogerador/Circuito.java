@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,8 @@ public class Circuito extends View {
     private Path pathGrade, pathSelecao, pathAnimacao;
     private Paint paintFundo, paintGrade, paintSelecao, paintAnimacao;
     private Desenho desenhar;
-    private RectF rectF;
+    private RectF rectFundo;
+    private boolean coresAjustaveis = false;
 
     private List<Path> pathTrilhas = new ArrayList<>();
     private List<Item> itemList = new ArrayList<>();
@@ -30,6 +32,8 @@ public class Circuito extends View {
     private boolean statusGrade = false, animacao = false;
 
     InterfaceCircuito interfaceCircuito;
+    private int colorNormal, colorPrincipal, colorSecundario, colorTerciario;
+    private int itemcolorPrincipal, itemcolorSecundario, itemcolorTerciario;
 
     public void setCircuitoListener(InterfaceCircuito interfaceCircuito) {
         this.interfaceCircuito = interfaceCircuito;
@@ -67,7 +71,7 @@ public class Circuito extends View {
         paintDesenho.setStyle(Paint.Style.STROKE);
 
         paintAnimacao = new Paint();
-        paintAnimacao.setColor(Color.BLUE); //TODO: VAI SER MODIFICAVEL
+        paintAnimacao.setColor(Color.BLUE);
         paintAnimacao.setStyle(Paint.Style.FILL_AND_STROKE);
 
         pathGrade = new Path();
@@ -97,7 +101,7 @@ public class Circuito extends View {
             Path path = desenhar.componente(pontoUm, pontoDois, componente); // Ele atualiza os valores dos pontos
             if (path != null) {
                 pathTrilhas.add(path);
-                itemList.add(new Item(numeroItem, path, new Ponto((pontoUm.X + pontoDois.X) / 2, (pontoUm.Y + pontoDois.Y) / 2)));
+                itemList.add(new Item(numeroItem, path, pontoUm, pontoDois));
             }
         }
     }
@@ -108,19 +112,46 @@ public class Circuito extends View {
 
     public void ToqueNaTela(MotionEvent event) {
         for (int elemento = 0; elemento < itemList.size(); elemento++) {
-            if (event.getX() >= (itemList.get(elemento).ponto.X - tamanhoMinimo) && (event.getX() <= itemList.get(elemento).ponto.X + tamanhoMinimo) &&
-                    (event.getY() >= (itemList.get(elemento).ponto.Y - tamanhoMinimo) && (event.getY() <= itemList.get(elemento).ponto.Y + tamanhoMinimo))) {
-                DesenhaSelecionado(itemList.get(elemento).ponto);
-                ultimoSelecionado = itemList.get(elemento).numeroItem;
+            Orientacao orientacao = desenhar.verificarOrientacao(itemList.get(elemento).pontoUm, itemList.get(elemento).pontoDois);
+            if (orientacao == Orientacao.CIMA) {
+                if ((event.getX() >= itemList.get(elemento).pontoUm.X - tamanhoMinimo) && (event.getX() <= itemList.get(elemento).pontoUm.X + tamanhoMinimo) &&
+                        (event.getY() >= itemList.get(elemento).pontoDois.Y) && (event.getY() <= itemList.get(elemento).pontoUm.Y)) {
+                    DesenhaSelecionado(itemList.get(elemento).pontoUm, itemList.get(elemento).pontoDois, orientacao);
+                    ultimoSelecionado = itemList.get(elemento).numeroItem;
+                }
+            } else if (orientacao == Orientacao.BAIXO) {
+                if ((event.getX() >= itemList.get(elemento).pontoUm.X - tamanhoMinimo) && (event.getX() <= itemList.get(elemento).pontoUm.X + tamanhoMinimo) &&
+                        (event.getY() >= itemList.get(elemento).pontoUm.Y) && (event.getY() <= itemList.get(elemento).pontoDois.Y)) {
+                    DesenhaSelecionado(itemList.get(elemento).pontoUm, itemList.get(elemento).pontoDois, orientacao);
+                    ultimoSelecionado = itemList.get(elemento).numeroItem;
+                }
+            } else if (orientacao == Orientacao.ESQUERDA) {
+                if ((event.getX() <= itemList.get(elemento).pontoDois.X) && (event.getX() >= itemList.get(elemento).pontoUm.X)&&
+                        (event.getY() >= (itemList.get(elemento).pontoUm.Y - tamanhoMinimo) && (event.getY() <= itemList.get(elemento).pontoUm.Y + tamanhoMinimo))) {
+                    DesenhaSelecionado(itemList.get(elemento).pontoUm, itemList.get(elemento).pontoDois, orientacao);
+                    ultimoSelecionado = itemList.get(elemento).numeroItem;
+                }
+            } else if (orientacao == Orientacao.DIREITA) {
+                if ((event.getX() <= itemList.get(elemento).pontoUm.X) && (event.getX() >= itemList.get(elemento).pontoDois.X) &&
+                        (event.getY() >= (itemList.get(elemento).pontoUm.Y - tamanhoMinimo) && (event.getY() <= itemList.get(elemento).pontoUm.Y + tamanhoMinimo))) {
+                    DesenhaSelecionado(itemList.get(elemento).pontoUm, itemList.get(elemento).pontoDois, orientacao);
+                    ultimoSelecionado = itemList.get(elemento).numeroItem;
+                }
             }
         }
         invalidate();
     }
 
-    private void DesenhaSelecionado(Ponto ponto) {
+    private void DesenhaSelecionado(Ponto pontoUm, Ponto pontoDois, Orientacao orientacao) {
         pathSelecao.reset();
-        RectF rectF = new RectF(ponto.X - 1.2f * tamanhoMinimo, ponto.Y - 1.2f * tamanhoMinimo, ponto.X + 1.2f * tamanhoMinimo, ponto.Y + 1.2f * tamanhoMinimo);
-        pathSelecao.addRect(rectF, Path.Direction.CCW);
+        if (orientacao == Orientacao.CIMA)
+            pathSelecao.addRect(new RectF(pontoUm.X - 1.2f * tamanhoMinimo, pontoDois.Y - 0.2f * tamanhoMinimo, pontoUm.X + 1.2f * tamanhoMinimo, pontoUm.Y + 0.2f * tamanhoMinimo), Path.Direction.CCW);
+        else if (orientacao == Orientacao.BAIXO)
+            pathSelecao.addRect(new RectF(pontoUm.X - 1.2f * tamanhoMinimo, pontoUm.Y - 0.2f * tamanhoMinimo, pontoUm.X + 1.2f * tamanhoMinimo, pontoDois.Y + 0.2f * tamanhoMinimo), Path.Direction.CCW);
+        else if (orientacao == Orientacao.ESQUERDA)
+            pathSelecao.addRect(new RectF(pontoUm.X - 0.2f * tamanhoMinimo, pontoUm.Y - 1.2f * tamanhoMinimo, pontoDois.X + 0.2f * tamanhoMinimo, pontoUm.Y + 1.2f * tamanhoMinimo), Path.Direction.CCW);
+        else if (orientacao == Orientacao.DIREITA)
+            pathSelecao.addRect(new RectF(pontoDois.X - 0.2f * tamanhoMinimo, pontoUm.Y - 1.2f * tamanhoMinimo, pontoUm.X + 0.2f * tamanhoMinimo, pontoUm.Y + 1.2f * tamanhoMinimo), Path.Direction.CCW);
     }
 
     public int selecionado() {
@@ -130,7 +161,7 @@ public class Circuito extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawRect(rectF, paintFundo);
+        canvas.drawRect(rectFundo, paintFundo);
         if(statusGrade)
             canvas.drawPath(pathGrade, paintGrade);
         for (int i = 0; i < pathTrilhas.size(); i++) {
@@ -140,8 +171,15 @@ public class Circuito extends View {
         }
 
         for (Item item: itemList) {
-            if (item.path != null) {
-                //TODO: Logica das cores ajustaveis tem que sair daqui
+            if (item.path != null) { //TODO: REVISAR ESSA LOGICA
+                if (coresAjustaveis && item.numeroItem == itemcolorPrincipal)
+                    paintDesenho.setColor(colorPrincipal);
+                else if (coresAjustaveis && item.numeroItem == itemcolorSecundario)
+                    paintDesenho.setColor(colorSecundario);
+                else if (coresAjustaveis && item.numeroItem == itemcolorTerciario)
+                    paintDesenho.setColor(colorTerciario);
+                else
+                    paintDesenho.setColor(colorNormal);
                 canvas.drawPath(item.path, paintDesenho);
             }
         }
@@ -184,14 +222,12 @@ public class Circuito extends View {
                 }
             }
         }
-
         desenhar = new Desenho(tamanhoMinimo);
-
-        rectF = new RectF(0, 0, larguraTotal, alturaTotal);
+        rectFundo = new RectF(0, 0, larguraTotal, alturaTotal);
         ultimoSelecionado = interfaceCircuito.circuitoPronto();
         for (Item item : itemList) {
             if (item.numeroItem == ultimoSelecionado) {
-                DesenhaSelecionado(item.ponto);
+                DesenhaSelecionado(item.pontoUm, item.pontoDois, desenhar.verificarOrientacao(item.pontoUm, item.pontoDois));
             }
         }
         super.onSizeChanged(larguraTotal, alturaTotal, oldw, oldh);
@@ -202,16 +238,30 @@ public class Circuito extends View {
         paintDesenho.setStrokeWidth(width);
     }
     public void setColor(int color) {
-        paintDesenho.setColor(color);
+        colorNormal = color;
     }
     public void setDivisao(int divisao) {
         this.divisao = divisao;
     }
-    public void setColorPrincipal(int color) {
-    }//TODO: PRECISAR ACHAR UMA MANEIRA DE DEIXAR AS FONTES COLORIDAS
-    public void setColorSecundario(int color) {
+
+    public void setCoresAjustaveis(boolean coresAjustaveis) {
+        this.coresAjustaveis = coresAjustaveis;
     }
-    public void setColorTerciario(int color) {
+    public void setColorPrincipal(int color, int itemCor) {
+        colorPrincipal = color;
+        itemcolorPrincipal = itemCor;
+    }
+    public void setColorSecundario(int color, int itemCor) {
+        colorSecundario = color;
+        itemcolorSecundario = itemCor;
+    }
+    public void setColorTerciario(int color, int itemCor) {
+        colorTerciario = color;
+        itemcolorTerciario = itemCor;
+    }
+
+    public void setColorAnimacao(int color) {
+        paintAnimacao.setColor(color);
     }
     public void setRaioGrade(int raioGrade) {
         this.raioGrade = raioGrade;
@@ -219,12 +269,12 @@ public class Circuito extends View {
     public void setStatusGrade(boolean statusGrade) {
         this.statusGrade = statusGrade;
     }
+
     public void setAnimacao(boolean animacao) {
         this.animacao = animacao;
     }
     public void startAnimacao() {
     }
-
     public void stopAnimacao() {
     }
     //endregion
