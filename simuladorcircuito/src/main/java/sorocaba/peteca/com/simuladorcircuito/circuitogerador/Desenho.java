@@ -1,5 +1,7 @@
 package sorocaba.peteca.com.simuladorcircuito.circuitogerador;
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 
@@ -595,6 +597,48 @@ class Desenho {
     //region Desenhos FALTA ARRUMAR
     private Path trasfP1(Ponto pontoUm, Ponto pontoDois, Orientacao orientacao) {
         Path path = new Path();
+//        if (orientacao == Orientacao.CIMA || orientacao == Orientacao.BAIXO) {
+//            int distanciaEsq = (ponto2.getY() - ponto1.getY())/4;
+//            RectF rectF1 = new RectF(ponto1.getX() - 0.75f * distanciaEsq, ponto1.getY(),
+//                    ponto1.getX() + 0.75f * distanciaEsq, ponto1.getY() + distanciaEsq);
+//            path.addArc(rectF1, -90, 180);
+//
+//            RectF rectF2 = new RectF(ponto1.getX() - 0.75f * distanciaEsq, ponto1.getY() + distanciaEsq,
+//                    ponto1.getX() + 0.75f * distanciaEsq, ponto1.getY() + 2*distanciaEsq);
+//            path.addArc(rectF2, -90, 180);
+//
+//            RectF rectF3 = new RectF(ponto1.getX() - 0.75f * distanciaEsq, ponto1.getY() + 2*distanciaEsq,
+//                    ponto1.getX() + 0.75f * distanciaEsq, ponto1.getY() + 3* distanciaEsq);
+//            path.addArc(rectF3, -90, 180);
+//
+//            RectF rectF4 = new RectF(ponto1.getX() - 0.75f * distanciaEsq, ponto1.getY() + 3*distanciaEsq,
+//                    ponto1.getX() + 0.75f * distanciaEsq, ponto1.getY() + 4*distanciaEsq);
+//            path.addArc(rectF4, -90, 180);
+//
+//            path.moveTo((ponto1.getX() + ponto3.getX())/2, ponto1.getY());
+//            path.lineTo((ponto2.getX() + ponto4.getX())/2, ponto2.getY());
+//
+//            int distanciaDir = (ponto4.getY() - ponto3.getY())/4;
+//            RectF rectF1d = new RectF(ponto3.getX() - 0.75f * distanciaDir, ponto3.getY(),
+//                    ponto3.getX() + 0.75f * distanciaDir, ponto3.getY() + distanciaDir);
+//            path.addArc(rectF1d, -90, -180);
+//
+//            RectF rectF2d = new RectF(ponto3.getX() - 0.75f * distanciaDir, ponto3.getY() + 1*distanciaDir,
+//                    ponto3.getX() + 0.75f * distanciaDir, ponto3.getY() + 2*distanciaDir);
+//            path.addArc(rectF2d, -90, -180);
+//
+//            RectF rectF3d = new RectF(ponto3.getX() - 0.75f * distanciaDir, ponto3.getY() + 2*distanciaDir,
+//                    ponto3.getX() + 0.75f * distanciaDir, ponto3.getY() + 3* distanciaDir);
+//            path.addArc(rectF3d, -90, -180);
+//
+//            RectF rectF4d = new RectF(ponto3.getX() - 0.75f * distanciaDir, ponto3.getY() + 3*distanciaDir,
+//                    ponto3.getX() + 0.75f * distanciaDir, ponto3.getY() + 4*distanciaDir);
+//            path.addArc(rectF4d, -90, -180);} else if (orientacao == Orientacao.ESQUERDA || orientacao == Orientacao.DIREITA) {
+//            int centroX = (pontoUm.X + pontoDois.X) / 2, centroY = pontoUm.Y, raio = Math.abs((pontoDois.X - pontoUm.X) / 2);
+//            path.addCircle(centroX, centroY, raio, Path.Direction.CCW);
+//            path.addArc(new RectF(-0.5f * raio + centroX, centroY, 0.5f * raio + centroX, +0.7f * raio + centroY), 270, -180);
+//            path.addArc(new RectF(-0.5f * raio + centroX, -0.7f * raio + centroY, 0.5f * raio + centroX, centroY), 270, 180);
+//        }
         return path;
     }
 

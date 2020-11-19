@@ -21,7 +21,7 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
     private Circuito circuito;
     private Resultados resultados;
     private boolean animacao = false, cursorStatus = false;
-    private long tempoAnimacao = 2000;
+    private long tempoAnimacao = 2048;
     private CountDownTimer counter;
 
     IntefaceSimulador intefaceSimulador;
@@ -96,12 +96,10 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoUm.setNomeEixoY(nome);
         graficoDois.setNomeEixoY(nomeDois);
     }
-
     public void setNomesEixoX(String nome, String nomeDois) {
         graficoUm.setNomeEixoX(nome);
         graficoDois.setNomeEixoX(nomeDois);
     }
-
     public void setCursorConfig(int color, int width) {
         graficoUm.setCursorColor(color);
         graficoUm.setCursorWidth(width);
@@ -109,75 +107,61 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         graficoDois.setCursorWidth(width);
         resultados.setColorAngulo(color);
     }
-
     public void setCursorStatus(boolean status) {
         this.cursorStatus = status;
         graficoUm.setCursorStatus(status);
         graficoDois.setCursorStatus(status);
         resultados.setStatus(status);
     }
-
     public void setPeriodos(int periodos) {
         graficoUm.setPeriodos(periodos);
         graficoDois.setPeriodos(periodos);
     }
-
     public void setEixosWidth(int width) {
         graficoUm.setEixosWidth(width);
         graficoDois.setEixosWidth(width);
     }
-
     public void setEixosHeigthMarcacoes(float width) {
         graficoUm.setEixosHeigthMarcacoes(width);
         graficoDois.setEixosHeigthMarcacoes(width);
     }
-
     public void setEixosTextSize(float width) {
         graficoUm.setEixosTextSize(width);
         graficoDois.setEixosTextSize(width);
     }
-
     public void setEixosSubTextSize(float width) {
         graficoUm.setEixosSubTextSize(width);
         graficoDois.setEixosSubTextSize(width);
     }
-
     public void setBeta(boolean status) {
         graficoUm.setBeta(status);
         graficoDois.setBeta(status);
     }
-
     public void setGraficoGrade(boolean status) {
         graficoUm.setGradeStatus(status);
         graficoDois.setGradeStatus(status);
     }
-
     public void setColorTensaoUm(int color) {
         graficoUm.setColorPrincipal(color);
-        circuito.setColorPrincipal(color);
+        circuito.setColor(color);
         resultados.setColorTensao(color);
     }//TODO: TEM PROBLEMA AQUI
-
     public void setColorTensaoDois(int color) {
         graficoUm.setColorSecundario(color);
-        circuito.setColorSecundario(color);
+        circuito.setColor(color);
     }
-
     public void setColorTensaoTres(int color) {
         graficoUm.setColorTerciario(color);
-        circuito.setColorTerciario(color);
+        circuito.setColor(color);
     }
-
     public void setColorCorrente(int color) {
         graficoDois.setColorPrincipal(color);
         resultados.setColorCorrente(color);
     }
-
     public void setEspessuraDados(int width) {
         graficoUm.setEspessuraDados(width);
         graficoDois.setEspessuraDados(width);
     }
-
     public void addSerie(Serie serie, int grafico) {
         if (grafico == 1) {
             graficoUm.addSerie(serie);
@@ -187,7 +171,6 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             resultados.setCorrenteMaxima(serie.valor[serie.max]);
         }
     }
-
     public void addSerie(Serie serie, Serie serieDois, int grafico) {
         if (grafico == 1) {
             graficoUm.addSerie(serie, serieDois);
@@ -195,7 +178,6 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoDois.addSerie(serie, serieDois);
         }
     }
-
     public void addSerie(Serie serie, Serie serieDois, Serie serieTres, int grafico) {
         if (grafico == 1) {
             graficoUm.addSerie(serie, serieDois, serieTres);
@@ -203,7 +185,6 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoDois.addSerie(serie, serieDois, serieTres);
         }
     }
-
     public void removeSerie(int grafico) {
         if (grafico == 1) {
             graficoUm.removeSerie();
@@ -211,35 +192,28 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoDois.removeSerie();
         }
     }
-
     public void setOndasSimultaneas (boolean status) {
         circuito.setCoresAjustaveis(status);
         this.OndasStatus = status;
     }
-
     public void setCircuitoWidth(int width) {
         circuito.setStrokeWidth(width);
     }
-
     public void setCircuitoColor(int color) {
         circuito.setColor(color);
     }
     public void setCircuitoAnimColor(int color){
         circuito.setColorAnimacao(color);
     }
-
     public void setRaioGrade(int raioGrade) {
         circuito.setRaioGrade(raioGrade);
     }
-
     public void setCircuitoGrade(boolean statusGrade) {
         circuito.setStatusGrade(statusGrade);
     }
-
     public String getCircuitoDimensoes() {
         return circuito.dimensoes();
     }
-
     public boolean startAnimacao() { //TODO: PAREI AQUI
         this.animacao = true;
         if ((graficoUm.serie != null) && (graficoDois != null)) {
@@ -247,29 +221,25 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             graficoDois.startAnimacao();
             circuito.startAnimacao();
             resultados.setStatus(false);
-            long tickTime = (3 * graficoUm.periodosReais * tempoAnimacao/(graficoUm.serie.tamanho));
+
+            long tickTime = (tempoAnimacao/(graficoUm.serie.tamanho));
             counter = new CountDownTimer(tempoAnimacao, tickTime) {
-
                 public void onTick(long millisUntilFinished) {
-                    long tStart = System.currentTimeMillis();
                     graficoUm.animar();
                     graficoDois.animar();
-                    long tEnd = System.currentTimeMillis();
-                    Log.d("TEMPO CONSUMIDO", String.valueOf(tEnd - tStart));
-                    Log.d("TEMPO em Millis", String.valueOf(millisUntilFinished));
-                    //circuito.animar();
+                    Log.d("TEMPO CONSUMIDO", String.valueOf(millisUntilFinished));
                 }
-
                 public void onFinish() {
-                    graficoUm.animar();
-                    graficoDois.animar();
-                    //circuito.animar();
-                    graficoUm.startAnimacao();
-                    graficoDois.startAnimacao();
-                    circuito.startAnimacao();
-                    resultados.limpar();
-                    resultados.setStatus(false);
-                    counter.start();
+                    stopAnimacao();
+//                    graficoUm.animar();
+//                    graficoDois.animar();
+//                    //circuito.animar();
+//                    graficoUm.startAnimacao();
+//                    graficoDois.startAnimacao();
+//                    circuito.startAnimacao();
+//                    resultados.limpar();
+//                    resultados.setStatus(false);
+//                    counter.start();
                 }
             }.start();
             return true;
@@ -278,7 +248,6 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
             return false;
         }
     }
-
     public void stopAnimacao() {
         this.animacao = false;
         counter.cancel();
@@ -287,7 +256,6 @@ public class SimuladorCircuito extends LinearLayout implements Circuito.Interfac
         circuito.stopAnimacao();
         if (cursorStatus) resultados.setStatus(true);
     }
-
     public void setAnimacaoTime(long time) {
         this.tempoAnimacao = time;
     }

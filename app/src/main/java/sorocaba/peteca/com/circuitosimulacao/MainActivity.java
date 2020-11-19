@@ -19,13 +19,13 @@ public class MainActivity extends AppCompatActivity implements IntefaceSimulador
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        double[] valores_x = new double[255];
-        valores = new double[255];
-        valoresY = new double[255];
+        double[] valores_x = new double[256];
+        valores = new double[256];
+        valoresY = new double[256];
         final boolean[] animar = {false};
 
-        for (int i = 0; i < 255; i++) {
-            valores_x[i] = (2 * Math.PI * i) / 255;
+        for (int i = 0; i < 256; i++) {
+            valores_x[i] = (2 * Math.PI * i) / 256;
             valores[i] = Math.sin(valores_x[i]);
             valoresY[i] = Math.cos(valores_x[i]);
         }

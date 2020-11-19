@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class Grafico extends View {
-
     // Variaveis relacionados com o gráfico sem modificações
     private float alturaPontoX, alturaPontoY, alturaTotal, cursor, betaX;
     private float larguraPontoX, larguraPontoY, larguraTotal;
@@ -224,7 +223,7 @@ public class Grafico extends View {
         cursor = (ultimoPonto * (larguraPontoX - larguraPontoY) / (serie.tamanho*periodosReais)) + larguraPontoY;
         changeCursor();
         pathDados.lineTo(cursor, (float) ((pegaValorAtual() / serie.valor[serie.max]) * (alturaPontoY - alturaPontoX)) + alturaPontoX);
-        ultimoPonto += 3 * periodosReais;
+        ultimoPonto += 5;//3 * periodosReais;
         invalidate();
     }
 
@@ -283,21 +282,17 @@ public class Grafico extends View {
     public void setNomeEixoX(String nomeEixoX) {
         this.nomeEixoX = nomeEixoX;
     }
-
     public void setNomeEixoY(String nomeEixoY) {
         this.nomeEixoY = nomeEixoY;
     }
-
     public float getCursor() {
         return cursor;
     }
-
     public void setCursor(float cursor) {
         this.cursor = cursor;
         changeCursor();
         invalidate();
     }
-
     public void setPeriodos(int periodos) {
         this.periodosReais = periodos;
         if (periodos != 3) {
@@ -336,66 +331,51 @@ public class Grafico extends View {
         atualizaEscala();
         atualizaDados();
     }
-
     public void setGradeStatus(boolean gradeStatus) {
         this.gradeStatus = gradeStatus;
     }
-
     public void setEixosWidth(int espessura) {
         paintEixos.setStrokeWidth(espessura);
 
     }
-
     public void setEixosHeigthMarcacoes(float altura) {
         this.tamanhoMarcacoes = altura;
     }
-
     public void setEixosTextSize(float altura) {
         this.tamanhoText = altura;
     }
-
     public void setEixosSubTextSize(float altura) {
         this.subtamanhoText = altura;
     }
-
     public void setCursorColor(int corCursor) {
         paintCursor.setColor(corCursor);
     }
-
     public void setCursorStatus(boolean cursorStatus) {
         this.cursorStatus = cursorStatus;
     }
-
     public void setCursorWidth(int espessura) {
         paintCursor.setStrokeWidth(espessura);
     }
-
     public void setBeta(boolean betaAtivado) {
         this.betaAtivado = betaAtivado;
     }
-
     public void setColorPrincipal(int color) {
         paintDados.setColor(color);
     }
-
     public void setColorSecundario(int color) {
         paintDadosDois.setColor(color);
     }
-
     public void setColorTerciario(int color) {
         paintDadosTres.setColor(color);
     }
-
     public void setEspessuraDados(float width) {
         paintDados.setStrokeWidth(width);
         paintDadosDois.setStrokeWidth(width * 0.8f);
         paintDadosTres.setStrokeWidth(width * 0.8f);
     }
-
     public double pegaValorAtual () {
         return serie.valor[ultimoPonto % serie.tamanho];
     }
-
     public double pegaAnguloAtual() {
         return (ultimoPonto*2*Math.PI)/serie.tamanho;
     }
@@ -407,7 +387,6 @@ public class Grafico extends View {
         ultimoPonto = 0;
         invalidate();
     }
-
     public void stopAnimacao() {
         this.animacao = false;
         pathDados.reset();
@@ -415,7 +394,6 @@ public class Grafico extends View {
         changeCursor();
         atualizaDados();
     }
-
 
     //endregion
 }
